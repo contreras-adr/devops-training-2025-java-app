@@ -50,7 +50,7 @@ pipeline {
 
     stage('Docker CI') {
         steps {
-            sh 'docker build -t devops-training-2025-java-app --build-arg VERSION=$IMAGE_VERSION -f devops/Dockerfile .
+            sh 'docker build -t devops-training-2025-java-app --build-arg VERSION=$IMAGE_VERSION -f devops/Dockerfile .'
             sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             sh 'docker tag devops-training-2025-java-app $DOCKERHUB_HOST/devops-training-2025-java-app:$IMAGE_VERSION'
             sh 'docker push $DOCKERHUB_HOST/devops-training-2025-java-app:$IMAGE_VERSION'
