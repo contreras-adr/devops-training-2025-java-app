@@ -103,7 +103,7 @@ pipeline {
         branch 'master'
       }
       steps {
-        echo "Ready to deploy version "${IMAGE_VERSION}" in PRO"
+        echo 'Ready to deploy version "${IMAGE_VERSION}" in PRO'
           // mail to: 'example@example.com',
         //             subject: 'Ready to deploy version "${IMAGE_VERSION}" in PRO',
         //             body:  'Ready to deploy version "${IMAGE_VERSION}" in PRO. Press the next Link <LINK TO RUN CD JOB>'
