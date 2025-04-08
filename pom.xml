@@ -46,4 +46,17 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>Nexus Releases</name>
+            <url>http://artifactory:8081/repository/maven-central/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>Nexus Snapshot</name>
+            <url>http://artifactory:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>
