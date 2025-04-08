@@ -22,14 +22,6 @@ pipeline {
   
   stages {
 
-    if (env.BRANCH_NAME == 'master') {
-      stage('List env vars') {
-        steps{
-          sh "printenv | sort"
-        }
-      } 
-     
-    }
     
     stage('Unit Test && Sonnar') {
       // Specifies where the entire Pipeline, or a specific stage, will execute in the Jenkins environment depending on where the agent section is placed
