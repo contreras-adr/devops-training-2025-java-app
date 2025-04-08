@@ -1,7 +1,6 @@
 #!groovy
 
-@Library('utils') _
-
+//@Library('utils') _
 //def utils = new org.scalian.Utils()
 
 pipeline {
