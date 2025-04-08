@@ -2,14 +2,14 @@
 
 @Library('utils') _
 
-def utils = new org.scalian.Utils()
+//def utils = new org.scalian.Utils()
 
 pipeline {
 	agent any // Default Agent
 
   parameters {
     //function in iac-devops project "jenkins/functions.groovy"
-    string(name: 'version', defaultValue: utils.getLastGitTag(), description: 'Docker Image Version')
+    string(name: 'version', defaultValue: /*utils.*/getLastGitTag(), description: 'Docker Image Version')
   }
 
   environment {
@@ -118,5 +118,12 @@ pipeline {
 }
 
 
-
+def getLastGitTag() {
+    sh "git tag --sort version:refname | head -n 1 > version.tmp"
+    String tag = readFile 'version.tmp'
+    echo "Branch: ${scm.branches[0].name}"
+    def result = tag ?: "0.0.1-Snapshot"
+    echo "Tag, ${result}." 
+    return result
+}
 
