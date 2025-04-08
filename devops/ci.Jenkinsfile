@@ -21,8 +21,8 @@ pipeline {
   
   stages {
 
-    stage('List env vars') {
-      if (env.BRANCH_NAME != 'master') {
+    if (env.BRANCH_NAME == 'master') {
+      stage('List env vars') {
         steps{
           sh "printenv | sort"
         }
