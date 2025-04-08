@@ -6,6 +6,7 @@ pipeline {
 	agent any // Default Agent
 
   parameters {
+    //function in iac-devops project "jenkins/functions.groovy"
     string(name: 'version', defaultValue: getLastGitTag(), description: 'Docker Image Version')
   }
 
@@ -122,12 +123,6 @@ pipeline {
   
 }
 
-def getLastGitTag() {
-    sh "git tag --sort version:refname | head -n 1 > version.tmp"
-    String tag = readFile 'version.tmp'
-    echo "Branch: ${scm.branches[0].name}"
-    echo "Tag, ${tag}." 
-    return tag
-}
+
 
 
