@@ -1,6 +1,6 @@
 #!groovy
 
-//@Library('functions')_
+@Library('functions')_
 
 pipeline {
 	agent any // Default Agent
