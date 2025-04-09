@@ -6,7 +6,7 @@ pipeline {
 	agent any // Default Agent
 
   parameters {
-    string(name: 'version', defaultValue: getLastGitTag(), description: 'Docker Image Version'),
+    string(name: 'version', defaultValue: getLastGitTag(), description: 'Docker Image Version')
     choice(name: 'environment', description: 'Environment', choices: ['DEV','PROD'])
   }
 
