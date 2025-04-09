@@ -7,7 +7,7 @@ pipeline {
 
   parameters {
     string(name: 'version', defaultValue: getLastGitTag(), description: 'Docker Image Version')
-    choice(name: 'environment', defaultValue: 'DEV', description: 'Environment', choices: ['DEV','PROD'])
+    choice(name: 'environment', description: 'Environment', choices: ['DEV','PROD'])
   }
 
   environment {
