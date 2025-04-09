@@ -35,6 +35,7 @@ pipeline {
       }
       steps {
         echo 'Deploying to DEV'
+        sh 'docker run --rm -d -n java-app -p 8080 $DOCKERHUB_HOST/devops-training-2025-java-app:$IMAGE_VERSION'
       }
     }
 
