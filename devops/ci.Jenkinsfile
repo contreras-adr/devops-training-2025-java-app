@@ -24,7 +24,7 @@ pipeline {
   stages {
 
     
-    stage('Unit Test && Sonnar') {
+    stage('Maven test & Install') {
       // Specifies where the entire Pipeline, or a specific stage, will execute in the Jenkins environment depending on where the agent section is placed
     	agent {
           dockerfile {
@@ -37,21 +37,29 @@ pipeline {
       	sh 'mvn test'
         // sh 'mvn verify sonar:sonar -Dsonar.projectKey="${SONARQUBE_JAVA_APP}" -Dsonar.host.url="${SONARQUBE_HOST_LOCAL}" -Dsonar.login="${SONARQUBE_LOGIN}"'
         // mvn clean deploy -Dmaven.test.skip=true
+        sh 'mvn install'
+        stash includes: 'myartefact', name: 'ARTEFACT'
         
       }
-      // post {
-      //     failure {
-      //         mail to: 'example@example.com',
-      //             subject: 'Test failed',
-      //             body: 'Test failed'
-      //     }
-      // }
+      
+      post {
+          // failure {
+          //     mail to: 'example@example.com',
+          //         subject: 'Test failed',
+          //         body: 'Test failed'
+          // }
+          always {
+            archiveArtifacts artifacts: './target/*.jar', onlyIfSuccessful: true
+            stash includes: './target/*.jar', name: 'app'
+        }
+      }
     }
 
     
 
     stage('Docker CI') {
         steps {
+            unstash 'app'
             sh 'docker build -t devops-training-2025-java-app --build-arg VERSION=$IMAGE_VERSION -f devops/local.Dockerfile .'
             sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             sh 'docker tag devops-training-2025-java-app $DOCKERHUB_HOST/devops-training-2025-java-app:$IMAGE_VERSION'
