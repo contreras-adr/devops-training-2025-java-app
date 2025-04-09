@@ -29,7 +29,7 @@ pipeline {
     	agent {
           dockerfile {
               filename 'devops/env.Dockerfile'
-              args '--build-arg VERSION=${IMAGE_VERSION}'
+              additionalBuildArgs '--build-arg VERSION=${IMAGE_VERSION}'
               reuseNode true
           }
       }
