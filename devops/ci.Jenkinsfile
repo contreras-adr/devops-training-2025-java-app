@@ -35,7 +35,8 @@ pipeline {
       }
       steps {
       	sh 'mvn test'
-        //sh 'mvn verify sonar:sonar -Dsonar.projectKey="${SONARQUBE_JAVA_APP}" -Dsonar.host.url="${SONARQUBE_HOST_LOCAL}" -Dsonar.login="${SONARQUBE_LOGIN}"'
+        // sh 'mvn verify sonar:sonar -Dsonar.projectKey="${SONARQUBE_JAVA_APP}" -Dsonar.host.url="${SONARQUBE_HOST_LOCAL}" -Dsonar.login="${SONARQUBE_LOGIN}"'
+        // mvn clean deploy -Dmaven.test.skip=true
         
       }
       // post {
@@ -47,27 +48,7 @@ pipeline {
       // }
     }
 
-    stage('Maven Publish') {
-      // Specifies where the entire Pipeline, or a specific stage, will execute in the Jenkins environment depending on where the agent section is placed
-    	agent {
-          dockerfile {
-              filename 'devops/env.Dockerfile'
-              args '--build-arg VERSION=${IMAGE_VERSION}'
-              reuseNode true
-          }
-      }
-      steps {
-      	sh ' mvn clean deploy -Dmaven.test.skip=true'
-        
-      }
-      // post {
-      //     failure {
-      //         mail to: 'example@example.com',
-      //             subject: 'Test failed',
-      //             body: 'Test failed'
-      //     }
-      // }
-    }
+    
 
     stage('Docker CI') {
         steps {
