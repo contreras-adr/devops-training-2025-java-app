@@ -1,0 +1,52 @@
+name: DockerHUb CI
+
+on:
+  push:
+    branches: [ "master", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  ci:
+    # runs-on: self-hosted
+    runs-on: ubuntu-latest
+    
+    container: docker
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Test Docker image
+        run: docker build . --file tests.Dockerfile --tag devops-training-flask-app-tests:latest
+
+      - name: Unit tests
+        run: docker run devops-training-flask-app-tests:latest
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+          registry: ${{ secrets.ACR_HOST }}
+      
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          file: Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-training-flask-app:latest
+
+  cd:
+    # runs-on: self-hosted
+    runs-on: ubuntu-latest 
+    container: docker
+    steps:
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Azure CLI script
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az account show

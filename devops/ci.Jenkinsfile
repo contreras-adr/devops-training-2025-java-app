@@ -38,7 +38,7 @@ pipeline {
         // sh 'mvn verify sonar:sonar -Dsonar.projectKey="${SONARQUBE_JAVA_APP}" -Dsonar.host.url="${SONARQUBE_HOST_LOCAL}" -Dsonar.login="${SONARQUBE_LOGIN}"'
         // mvn clean deploy -Dmaven.test.skip=true
         sh 'mvn install'
-        stash includes: 'myartefact', name: 'ARTEFACT'
+        stash includes: './target/*.jar', name: 'app'
         
       }
       
@@ -50,7 +50,7 @@ pipeline {
           // }
           always {
             archiveArtifacts artifacts: './target/*.jar', onlyIfSuccessful: true
-            stash includes: './target/*.jar', name: 'app'
+           
         }
       }
     }
