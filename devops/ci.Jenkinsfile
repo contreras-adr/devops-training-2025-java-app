@@ -8,7 +8,7 @@ pipeline {
 
   parameters {
     //function in iac-devops project "jenkins/functions.groovy"
-    string(name: 'version', defaultValue: /*utils.*/getLastGitTag(), description: 'Docker Image Version')
+    string(name: 'version', defaultValue: "0.0.1-SNAPSHOT"/*utils.getLastGitTag()*/, description: 'Docker Image Version')
   }
 
   environment {
