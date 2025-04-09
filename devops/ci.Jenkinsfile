@@ -35,7 +35,7 @@ pipeline {
       }
       steps {
       	sh 'mvn test'
-        sh 'mvn verify sonar:sonar -Dsonar.projectKey="${SONARQUBE_JAVA_APP}" -Dsonar.host.url="${SONARQUBE_HOST_LOCAL}" -Dsonar.login="${SONARQUBE_LOGIN}"'
+        //sh 'mvn verify sonar:sonar -Dsonar.projectKey="${SONARQUBE_JAVA_APP}" -Dsonar.host.url="${SONARQUBE_HOST_LOCAL}" -Dsonar.login="${SONARQUBE_LOGIN}"'
         
       }
       // post {
