@@ -27,14 +27,14 @@ pipeline {
         }
       }
       steps {
-      	catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-            sh 'mvn verify sonar:sonar \
-                -Dsonar.projectKey=demo-sonarQube-llm \
-                -Dsonar.host.url=http://172.16.236.10:9000 \
-                -Dsonar.login=sqp_4feea8ee1d8ff30fe99ea20cd86dbc1f81b416d2'
-        }
+      	//catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+        sh 'mvn verify sonar:sonar \
+            -Dsonar.projectKey=demo-sonarQube-llm \
+            -Dsonar.host.url=http://172.16.236.10:9000 \
+            -Dsonar.login=sqp_4feea8ee1d8ff30fe99ea20cd86dbc1f81b416d2'
+        //}
         // Si llegamos aquí sin error, marcamos SONAR_SUCCESS
-        SONAR_SUCCESS = "true"
+       // SONAR_SUCCESS = "true"
       }
     }
 
