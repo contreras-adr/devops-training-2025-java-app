@@ -15,7 +15,7 @@ pipeline {
       }
     }
     
-    stage('Test') {
+    stage('SonarQube') {
       // Specifies where the entire Pipeline, or a specific stage, will execute in the Jenkins environment depending on where the agent section is placed
     	agent {
       	docker {
@@ -23,7 +23,59 @@ pipeline {
         }
       }
       steps {
-      	sh 'mvn test'
+      	sh 'mvn verify sonar:sonar \
+            -Dsonar.projectKey=demo-sonarQube-llm \
+            -Dsonar.host.url=http://172.16.236.10:9000 \
+            -Dsonar.login=sqp_4feea8ee1d8ff30fe99ea20cd86dbc1f81b416d2'
+      }
+    }
+
+     stage('Extract Sonar Report') {
+      // Specifies where the entire Pipeline, or a specific stage, will execute in the Jenkins environment depending on where the agent section is placed
+    	agent {
+        dockerfile {
+            filename 'Dockerfile'   
+            dir './sonarqube-llm'                 // Directorio donde está el Dockerfile
+            additionalBuildArgs ''  // Si quieres pasar build args, aquí
+        }
+      }
+      environment {
+          SONAR_HOST = 'http://172.16.236.10:9000'
+          SONAR_TOKEN = 'sqp_4feea8ee1d8ff30fe99ea20cd86dbc1f81b416d2'
+          PROJECT_KEY = 'demo-sonarQube-llm'
+      }
+      steps {
+          sh 'python fetch_sonar_report.py'
+          echo 'SonarQube report fetched successfully!'
+
+          sh 'cat sonar_last_analysis.json'
+
+          // Copiamos el fichero desde donde esté al workspace (si es necesario)
+          sh 'cp sonar_last_analysis.json $WORKSPACE/'
+          
+          // Guardamos sonar_last_analysis.json como artefacto de Jenkins
+          archiveArtifacts artifacts: 'sonar_last_analysis.json', fingerprint: true
+      }
+    }
+
+    stage('LLM Analysis') {
+    	
+      steps {
+      	// Recuperamos el artefacto si hiciera falta (opcional en pipelines multi-node)
+        unstash 'workspace' // Solo si es multi-node
+        
+        sh '''
+            git config --global user.email "jenkins@example.com"
+            git config --global user.name "Jenkins CI"
+
+            git pull
+
+            cp sonar_last_analysis.json .
+            git add sonar_last_analysis.json
+            git commit -m "SonarQube Analysis" || echo "Nothing to commit"
+
+            git push
+        '''
       }
     }
 
